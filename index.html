@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PAC2 - Víctor Vivancos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .visualization {
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Visualització de dades PAC2 - Víctor Vivancos</h1>
+    
+    <div class="container">
+        <div class="visualization">
+            <h2>Circle Packing</h2>
+            <p>Generació d'un Circle Packing on es mostra la densitat poblacional de les diferents comarques de Catalunya.
+                Les dades han sigut extretes d'Idescat: <a href="https://www.idescat.cat/indicadors/?id=aec&n=15227&tema=xifpo">https://www.idescat.cat/indicadors/?id=aec&n=15227&tema=xifpo</a></p>
+            <iframe src="circle_packing.html"></iframe>
+        </div>
+        <div class="visualization">
+            <h2>Linear Dendrogram</h2>
+            <p>Cluster jeràrquic generat a partir del dataset <a href="https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_wine.html">Wine</a></p>
+            <iframe src="dendrograma.html"></iframe>
+        </div>
+        <div class="visualization">
+            <h2>Convex Hull</h2>
+            <p>Generació d'un convex hull a partir del dataset <a href="https://rpubs.com/moeransm/intro-iris">Iris</a>, per a la visualització s'han fet servir la dimensió longitud del sèpal (Eix X) i la dimensió amplitud del sèpal (Eix Y)</p>
+            <iframe src="convex_hull.html"></iframe>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+---
+title: "PAC2"
+author: "Víctor Vivancos Serrano"
+date: "2024-04-21"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Circle Packing
+
+Generació d'un Circle Packing on es mostra la densitat poblacional de les diferents comarques de Catalunya.
+Les dades han sigut extretes d'Idescat: https://www.idescat.cat/indicadors/?id=aec&n=15227&tema=xifpo
+
+
+```{r}
+library(tidyverse)
+library(hrbrthemes)
+library(circlepackeR)  
+library(data.tree)
+
+data <- read.csv("densitat.csv", skip=7, sep=";")
+data$Densitat <- as.numeric(gsub(",", ".", data$Densitat))
+
+data <- data %>% select(-Superficie, -Població)
+
+data$pathString <- paste("Catalunya", data$Provincia, data$Comarca, sep="/")
+
+densitat <- as.Node(data)
+
+p <- circlepackeR(densitat, size="Densitat", color_min="hsl(56,80%,80%)", color_max="hsl(341,30%,40%)")
+print(p)
+library(htmlwidgets)
+saveWidget(p, 'circle_packing.html', selfcontained = TRUE)
+
+```
+
+
+
+## Convex hull
+  
+
+```{r}
+library(plotly)
+
+#Càrrega del dataset
+data("iris")
+
+# Espècies
+species <- unique(iris$Species)
+
+# Colors de les espècies
+colors <- c("red", "green", "blue")
+colors_map <- setNames(colors, species)
+
+# Generació del gràfic
+p <- plot_ly(data = iris, x = ~Sepal.Length, y = ~Sepal.Width, 
+             type = 'scatter', mode = 'markers', 
+             marker = list(size = 10, color = ~factor(Species, labels = colors)),
+             text = ~paste("Species:", Species)) %>%
+  layout(title = "Iris Sepal Dimensions",
+         xaxis = list(title = "Sepal Length"),
+         yaxis = list(title = "Sepal Width"),
+         legend = list(title = list(text = "Species")))
+
+
+for (i in 1:length(species)) {
+  species_data <- subset(iris, Species == species[i])
+  hull_indices <- chull(species_data$Sepal.Length, species_data$Sepal.Width)
+  hull_indices <- c(hull_indices, hull_indices[1]) # Close the polygon
+
+  p <- add_trace(p, data = species_data[hull_indices, ], x = ~Sepal.Length, y = ~Sepal.Width,
+                 type = 'scatter', mode = 'lines', fill = 'toself',
+                 marker = list(color = colors_map[species[i]]),
+                 showlegend = FALSE,
+                 line = list(color = colors_map[species[i]]))
+}
+
+saveWidget(p, "convex_hull.html")
+
+
+```
+
+
